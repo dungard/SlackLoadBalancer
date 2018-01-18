@@ -1,0 +1,5 @@
+FROM openjdk:8
+
+COPY target/slackloadbalancer.jar /usr/src/slackloadbalancer.jar
+
+CMD java -jar /usr/src/slackloadbalancer.jar
