@@ -13,5 +13,8 @@ dependencies:
     
 test:    
     pre:
-    - docker run -d -p 5672:5672 --name rabbitmq harbur/rabbitmq-cluster
-    - sleep 15
+      - docker swarm init
+    
+    override:
+      - chmod +x dockersetup.sh
+      - dockersetup.sh
