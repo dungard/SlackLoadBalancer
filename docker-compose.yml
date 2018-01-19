@@ -10,9 +10,16 @@ services:
       ports:
         - "5672:5672"
         - "15672:15672"
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:15672"]
+        interval: 30s
+        timeout: 10s
+        retries: 5  
     rabbit2:
       image: harbur/rabbitmq-cluster
       hostname: rabbit2
+      depends_on:
+        - rabbit1
       links:
         - rabbit1
       environment:
@@ -28,6 +35,8 @@ services:
     rabbit3:
       image: harbur/rabbitmq-cluster
       hostname: rabbit3
+      depends_on:
+        - rabbit1
       links:
         - rabbit1
         - rabbit2
@@ -51,6 +60,11 @@ services:
           - rabbit1
           - rabbit2
           - rabbit3
+        environment:
+          - RABBIT_MASTER=rabbit1
+        command: 
+          - ./startbalancer.sh  
+          
 networks:
   balancernet:
     driver: overlay

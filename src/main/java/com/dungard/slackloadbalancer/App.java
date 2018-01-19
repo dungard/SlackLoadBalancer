@@ -8,8 +8,10 @@ public class App {
 
     public static void main(String[] args) {
         try {
+            String host = System.getenv("RABBIT_MASTER");
+            System.out.println("Connecting to... " + host);
             ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost("rabbit1");
+            factory.setHost(host);
             factory.setPort(5672);
             Connection connection = factory.newConnection();
             Channel channel = connection.createChannel();
