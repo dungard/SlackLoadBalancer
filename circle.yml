@@ -10,7 +10,6 @@ environment:
 dependencies:
   pre:
     - docker pull harbur/rabbitmq-cluster:latest
-    - sudo apt-get update; sudo apt-get install --only-upgrade docker-engine
     - sudo apt-get install docker
     - pip install docker-compose
     
