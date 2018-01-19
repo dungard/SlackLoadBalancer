@@ -1,0 +1,17 @@
+machine:
+  services:
+    - docker
+  java:
+    version: openjdk8  
+
+environment:
+  RABBIT_MASTER: localhost  
+    
+dependencies:
+  pre:
+    - docker pull harbur/rabbitmq-cluster:latest
+    
+test:    
+    pre:
+    - docker container run -d -p 5672:5672 --name rabbitmq harbur/rabbitmq-cluster
+    - sleep 15
