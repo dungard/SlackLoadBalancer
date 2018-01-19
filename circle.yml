@@ -10,6 +10,8 @@ environment:
 dependencies:
   pre:
     - docker pull harbur/rabbitmq-cluster:latest
+    - sudo apt-get update; sudo apt-get upgrade
+    - pip install docker-compose
     
 test:    
     pre:
@@ -17,4 +19,4 @@ test:
     
     override:
       - chmod +x dockersetup.sh
-      - dockersetup.sh
+      - ./dockersetup.sh
