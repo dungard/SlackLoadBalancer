@@ -1,0 +1,50 @@
+version: 2
+jobs:
+  build:
+    machine: 
+        image: circleci/classic:201711-01
+        
+    working_directory: ~/SlackLoadBalancer
+
+    steps:
+
+      - checkout
+
+      - restore_cache:
+          key: SlackLoadBalancer-{{ checksum "pom.xml" }}
+          
+      - run: sudo apt-get update
+      - run: sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
+      - run: curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | sudo apt-key add -
+      - run: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $(lsb_release -cs) stable"
+      - run: sudo apt-get update
+      - run: sudo apt-get install docker-ce
+      - run: sudo apt-get install python-pip python-dev build-essential openjdk-8-jdk maven
+      - run: sudo pip install --upgrade pip
+      - run: sudo pip install --upgrade virtualenv
+      - run: pip install docker-compose
+   
+      - run: mvn dependency:go-offline
+
+      - run: sudo docker pull harbur/rabbitmq-cluster:latest
+      
+      - run: sudo docker swarm init
+      
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: SlackLoadBalancer-{{ checksum "pom.xml" }}
+          
+      - run: sudo docker run -d -p 5672:5672 --name rabbitmq harbur/rabbitmq-cluster && sleep 10
+      - run: mvn clean package
+      - run: docker container stop rabbitmq
+      - run: docker image build -t slackloadbalancer:latest .
+      - run: docker stack deploy --compose-file=docker-compose.yml slackbalancercluster
+      
+      - store_test_results:
+          path: target/surefire-reports
+      
+      - store_artifacts:
+          path: target/slackloadbalancer.jar
+         
+          
