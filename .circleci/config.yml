@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  test:
     machine: 
         image: circleci/classic:201711-01
         
@@ -40,6 +40,7 @@ jobs:
       - run: docker container stop rabbitmq
       - run: docker image build -t slackloadbalancer:latest .
       - run: docker stack deploy --compose-file=docker-compose.yml slackbalancercluster
+      - run: cd integrationtests && mvn test
       
       - store_test_results:
           path: target/surefire-reports
