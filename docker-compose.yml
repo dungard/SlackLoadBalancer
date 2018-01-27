@@ -63,7 +63,9 @@ services:
         environment:
           - RABBIT_MASTER=rabbit1
         command: 
-          - ./startbalancer.sh  
+          - ./startbalancer.sh 
+        deploy:
+          replicas: 2  
           
 networks:
   balancernet:

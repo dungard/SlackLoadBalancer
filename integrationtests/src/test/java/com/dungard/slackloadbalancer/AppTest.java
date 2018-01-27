@@ -1,36 +1,20 @@
-package com.dungard.findcontabili;
+package com.dungard.slackloadbalancer;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+
+import org.junit.Test;
+
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 /**
- * Unit test for simple App.
+ * Integration tests for complete Swarm setup
+ * and load balancer project
  */
-public class AppTest extends TestCase {
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
+public class AppTest extends BaseTest {
+    public AppTest() throws IOException, TimeoutException { }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+    @Test
+    public void testLogin() {
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
     }
 }
