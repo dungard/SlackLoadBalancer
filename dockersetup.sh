@@ -1,5 +1,7 @@
 #!/bin/bash
 
+docker pull harbur/rabbitmq-cluster
+
 docker run -d -p 5672:5672 --name rabbitmq harbur/rabbitmq-cluster
 
 sleep 10

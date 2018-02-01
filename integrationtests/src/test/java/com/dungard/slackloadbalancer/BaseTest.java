@@ -10,8 +10,8 @@ import java.util.concurrent.TimeoutException;
  * rabbitmq client
  */
 public abstract class BaseTest {
-    protected TestWebsocketServer testWebsocketServer;
-    protected TestRabbitClient testRabbitClient;
+    protected static TestWebsocketServer testWebsocketServer;
+    protected static TestRabbitClient testRabbitClient;
 
     public BaseTest() throws IOException, TimeoutException {
         testWebsocketServer = new TestWebsocketServer();
@@ -19,7 +19,7 @@ public abstract class BaseTest {
     }
 
     @AfterClass
-    public void cleanClass() throws IOException, InterruptedException {
+    public static void cleanClass() throws IOException, InterruptedException {
         testWebsocketServer.stop();
         testRabbitClient.shutDown();
     }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -21,6 +22,7 @@ public class TestRabbitClient {
 
     public TestRabbitClient() throws IOException, TimeoutException {
         String host = System.getenv("RABBIT_MASTER");
+        System.out.println("Connecting to... " + host);
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(host);
         factory.setPort(5672);
@@ -56,7 +58,7 @@ public class TestRabbitClient {
             }
         });
 
-        return response.take();
+        return response.poll(2, TimeUnit.SECONDS);
     }
 
     public void subscribeToQueue(String queueName) throws IOException {

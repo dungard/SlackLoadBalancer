@@ -3,7 +3,10 @@ jobs:
   build:
     machine: 
         image: circleci/classic:201711-01
-        
+
+    environment:
+        - RABBIT_MASTER: localhost
+
     working_directory: ~/SlackLoadBalancer
 
     steps:
@@ -39,7 +42,7 @@ jobs:
       - run: mvn clean package
       - run: docker container stop rabbitmq
       - run: docker image build -t slackloadbalancer:latest .
-      - run: docker stack deploy --compose-file=docker-compose.yml slackbalancercluster
+      - run: docker stack deploy --compose-file=docker-compose.yml slackbalancercluster && sleep 10
       - run: cd integrationtests && mvn test
       
       - store_test_results:

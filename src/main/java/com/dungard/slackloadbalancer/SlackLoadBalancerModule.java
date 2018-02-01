@@ -5,7 +5,7 @@ import com.google.inject.AbstractModule;
 /**
  * Module to set up Guice DI
  */
-public class SlackLoadBalanceModule extends AbstractModule {
+public class SlackLoadBalancerModule extends AbstractModule {
     @Override
     protected void configure() {
 
