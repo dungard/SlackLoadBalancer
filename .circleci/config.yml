@@ -42,7 +42,7 @@ jobs:
       - run: mvn clean package
       - run: docker container stop rabbitmq
       - run: docker image build -t slackloadbalancer:latest .
-      - run: docker stack deploy --compose-file=docker-compose.yml slackbalancercluster && sleep 10
+      - run: docker stack deploy --compose-file=docker-compose.yml slackbalancercluster && sleep 10xz
       - run: cd integrationtests && mvn test
       
       - store_test_results:

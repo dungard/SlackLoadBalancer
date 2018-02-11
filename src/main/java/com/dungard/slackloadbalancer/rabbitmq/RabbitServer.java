@@ -1,7 +1,7 @@
 package com.dungard.slackloadbalancer.rabbitmq;
 
-import com.dungard.slackloadbalancer.interfaces.RabbitHandler;
-import com.dungard.slackloadbalancer.interfaces.RabbitRpcHandler;
+import com.dungard.slackloadbalancer.interfaces.MessageListener;
+import com.dungard.slackloadbalancer.interfaces.RpcListener;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.rabbitmq.client.*;
@@ -17,7 +17,7 @@ public class RabbitServer {
     @Inject
     private RabbitConnection rabbitConnection;
 
-    public void addListenerToRpcQueue(String queueName, RabbitRpcHandler rpcHandler) throws IOException {
+    public void addListenerToRpcQueue(String queueName, RpcListener rpcListener) throws IOException {
         Channel channel = rabbitConnection.getChannel();
 
         channel.queueDeclare(queueName,false, false, false, null);
@@ -35,7 +35,7 @@ public class RabbitServer {
 
                 String message = new String(body,"UTF-8");
 
-                String response = rpcHandler.handleRpcRequest(message);
+                String response = rpcListener.handleRpcRequest(message);
 
                 channel.basicPublish( "", properties.getReplyTo(), replyProps, response.getBytes("UTF-8"));
                 channel.basicAck(envelope.getDeliveryTag(), false);
@@ -49,7 +49,7 @@ public class RabbitServer {
         channel.basicConsume(queueName, false, consumer);
     }
 
-    public void addListenerToQueue(String queueName, RabbitHandler rabbitHandler) throws IOException {
+    public void addListenerToQueue(String queueName, MessageListener messageListener) throws IOException {
         Channel channel = rabbitConnection.getChannel();
 
         channel.queueDeclare(queueName,false, false, false, null);
@@ -61,7 +61,7 @@ public class RabbitServer {
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String message = new String(body,"UTF-8");
 
-                rabbitHandler.handleRequest(message);
+                messageListener.handleRequest(message);
             }
         };
 

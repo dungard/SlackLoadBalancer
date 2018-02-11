@@ -2,8 +2,8 @@ package com.dungard.slackloadbalancer.interfaces;
 
 /**
  * Handles requests that don't
- * need listening to
+ * need responding to
  */
-public interface RabbitHandler {
+public interface MessageListener {
     void handleRequest(String message);
 }

@@ -1,4 +1,4 @@
-package com.dungard.slackloadbalancer.models.enums;
+package com.dungard.slackloadbalancer.config.enums;
 
 /**
  * Default values for various things
@@ -8,7 +8,12 @@ public enum Defaults {
 
     private String value;
 
-    private Defaults(String value) {
+    Defaults(String value) {
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 }
